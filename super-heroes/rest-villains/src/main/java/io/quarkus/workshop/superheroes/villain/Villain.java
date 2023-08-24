@@ -1,0 +1,54 @@
+package io.quarkus.workshop.superheroes.villain;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.util.Random;
+
+@Entity
+public class Villain extends PanacheEntity {
+
+    @NotNull
+    @Size(min = 3, max = 50)
+    public String name;
+
+    public String otherName;
+
+    @NotNull
+    @Min(1)
+    public int level;
+
+    public String picture;
+
+    @Column(columnDefinition = "TEXT")
+    public String powers;
+
+    public static Villain findRandom() {
+        var randomIndex = new Random().nextInt((int) count());
+        return findAll().page(randomIndex, 1).firstResult();
+    }
+
+    public void merge(Villain villain) {
+        name = villain.name;
+        otherName = villain.otherName;
+        level = villain.level;
+        picture = villain.picture;
+        powers = villain.powers;
+    }
+
+    @Override
+    public String toString() {
+        return "Villain{" +
+            "name='" + name + '\'' +
+            ", otherName='" + otherName + '\'' +
+            ", level=" + level +
+            ", picture='" + picture + '\'' +
+            ", powers='" + powers + '\'' +
+            ", id=" + id +
+            "} " + super.toString();
+    }
+}
