@@ -20,10 +20,10 @@ import static org.hamcrest.Matchers.matchesPattern;
  */
 @QuarkusTest
 @TestProfile(QuinoaTestProfiles.Enable.class)
-public class WebUITests {
+class WebUITests {
 
     @Test
-    public void webApplicationEndpoint() {
+    void webApplicationEndpoint() {
         get("/")
             .then()
             .statusCode(OK.getStatusCode())

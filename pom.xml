@@ -15,6 +15,7 @@
         <module>super-heroes/load-super-heroes</module>
         <module>super-heroes/rest-villains</module>
         <module>super-heroes/rest-heroes</module>
+        <module>super-heroes/rest-fights</module>
     </modules>
     <build>
         <plugins>
