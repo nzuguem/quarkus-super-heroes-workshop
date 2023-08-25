@@ -6,6 +6,8 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -24,6 +26,9 @@ public class FightResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(FightResource.class);
 
     private final FightService fightService;
+
+    @ConfigProperty(name = "process.milliseconds", defaultValue = "0")
+    long tooManyMilliseconds;
 
     public FightResource(FightService fightService) {
         this.fightService = fightService;
@@ -50,8 +55,10 @@ public class FightResource {
             )
         )
     )
+    @Timeout(500)
     public Response getRandomFighters() {
 
+        this.veryLongProcess();
         var fighters = this.fightService.findRandomFighters();
 
         LOGGER.debug("Random fighters {}", fighters);
@@ -131,5 +138,13 @@ public class FightResource {
         return Response.created(uri)
             .entity(fight)
             .build();
+    }
+
+    private void veryLongProcess() {
+        try {
+            Thread.sleep(this.tooManyMilliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

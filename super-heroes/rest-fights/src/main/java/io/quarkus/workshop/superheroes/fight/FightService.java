@@ -1,9 +1,12 @@
 package io.quarkus.workshop.superheroes.fight;
 
+import io.quarkus.workshop.superheroes.fight.client.Hero;
 import io.quarkus.workshop.superheroes.fight.client.HeroProxy;
+import io.quarkus.workshop.superheroes.fight.client.Villain;
 import io.quarkus.workshop.superheroes.fight.client.VillainProxy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +40,7 @@ public class FightService {
     }
 
     public Fighters findRandomFighters() {
-        return Fighters.of(this.heroProxy.findRandomHero(), this.villainProxy.findRandomVillain());
+        return Fighters.of(this.findRandomHero(), this.findRandomVillain());
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
@@ -70,5 +73,35 @@ public class FightService {
     private Fight villainWon(Fighters fighters) {
         LOGGER.info("Gee, Villain won 🧟‍♀️");
         return fighters.toFightInFavorOfVillain();
+    }
+
+    @Fallback(fallbackMethod = "fallbackRandomHero")
+    Hero findRandomHero() {
+        return this.heroProxy.findRandomHero();
+    }
+
+    @Fallback(fallbackMethod = "fallbackRandomVillain")
+    Villain findRandomVillain() {
+        return villainProxy.findRandomVillain();
+    }
+
+    public Hero fallbackRandomHero() {
+        LOGGER.warn("Falling back on Hero");
+        return new Hero(
+            "Fallback hero",
+            1,
+            "https://dummyimage.com/280x380/1e8fff/ffffff&text=Fallback+Hero",
+            "Fallback hero powers"
+        );
+    }
+
+    public Villain fallbackRandomVillain() {
+        LOGGER.warn("Falling back on Villain");
+        return new Villain(
+            "Fallback villain",
+            42,
+            "https://dummyimage.com/280x380/b22222/ffffff&text=Fallback+Villain",
+            "Fallback villain powers"
+        );
     }
 }
