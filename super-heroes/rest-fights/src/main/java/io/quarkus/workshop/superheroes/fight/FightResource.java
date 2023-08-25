@@ -126,8 +126,10 @@ public class FightResource {
 
         var uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(fight.id)).build();
 
-        LOGGER.debug("Fight created {}", uri);
+        LOGGER.debug("Fight created {}", fight);
 
-        return Response.created(uri).build();
+        return Response.created(uri)
+            .entity(fight)
+            .build();
     }
 }

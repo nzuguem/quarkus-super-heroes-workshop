@@ -2,10 +2,15 @@ package io.quarkus.workshop.superheroes.fight;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import io.quarkus.workshop.superheroes.fight.client.Hero;
+import io.quarkus.workshop.superheroes.fight.client.HeroProxy;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 
@@ -17,7 +22,22 @@ import static org.hamcrest.CoreMatchers.is;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class FightResourceTest {
 
+
+    @RestClient
+    @InjectMock(convertScopes = true)
+    private HeroProxy heroProxy;
+
     private static String fightId;
+
+    @BeforeEach
+    void setup() {
+        Mockito.when(this.heroProxy.findRandomHero()).thenReturn(new Hero(
+            "Super Baguette",
+            42,
+            "super_baguette.png",
+            "eats baguette really quickly"
+        ));
+    }
 
     @Test
     void Should_say_hello() {
@@ -53,6 +73,20 @@ class FightResourceTest {
             .get("/api/fights/{id}")
             .then()
             .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    void Should_get_random_fighters() {
+
+        // Act + Assert
+        given()
+            .log().all()
+            .accept(MediaType.APPLICATION_JSON)
+            .when()
+            .get("/api/fights/randomfighters")
+            .then()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .contentType(MediaType.APPLICATION_JSON);
     }
 
     @Test
