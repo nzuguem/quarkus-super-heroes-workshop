@@ -24,10 +24,10 @@ class HeroResourceTest {
 
         // Act + Assert
         given()
-          .when().get("/api/heroes/hello")
-          .then()
-             .statusCode(200)
-             .body(is("Hello Hero Resource"));
+            .when().get("/api/heroes/hello")
+            .then()
+            .statusCode(200)
+            .body(is("Hello Hero Resource"));
     }
 
     @Test
@@ -68,7 +68,7 @@ class HeroResourceTest {
                 "otherName": "Super Baguette Tradition",
                 "picture": "super_baguette.png",
                 "powers": "eats baguette really quickly",
-                "level": 0
+                "maturity": 0
             }
             """;
 
@@ -105,13 +105,13 @@ class HeroResourceTest {
     void Should_add_hero() throws JsonProcessingException {
 
         // Arrange
-        var heroJson ="""
+        var heroJson = """
             {
                 "name": "Super Baguette",
                 "otherName": "Super Baguette Tradition",
                 "picture": "super_baguette.png",
                 "powers": "eats baguette really quickly",
-                "level": 42
+                "maturity": 42
             }
             """;
 
@@ -145,7 +145,7 @@ class HeroResourceTest {
                 "otherName": "Super Baguette Tradition (updated)",
                 "picture": "super_baguette_updated.png",
                 "powers": "eats baguette really quickly (updated)",
-                "level": 43
+                "maturity": 43
             }
             """, Long.valueOf(heroId));
 

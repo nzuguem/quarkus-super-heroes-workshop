@@ -45,7 +45,8 @@ public class HeroResource {
     )
     public Uni<Response> getRandomHero() {
         return Hero.findRandom()
-            .map(hero -> Response.ok(hero).build())
+            .onItem().ifNotNull().transform(hero -> Response.ok(hero).build())
+            .onItem().ifNull().continueWith(Response.status(Response.Status.NOT_FOUND).build())
             .invoke(response -> LOGGER.debug("Random hero {}", response.getEntity()));
     }
 
@@ -122,7 +123,9 @@ public class HeroResource {
     @WithTransaction
     public Uni<Response> updateHero(@Valid Hero hero) {
         return Hero.<Hero>findById(hero.id)
-            .invoke(heroToUpdate -> { if (Objects.nonNull(heroToUpdate))  heroToUpdate.merge(hero);})
+            .invoke(heroToUpdate -> {
+                if (Objects.nonNull(heroToUpdate)) heroToUpdate.merge(hero);
+            })
             .map(heroUpdated -> Objects.nonNull(heroUpdated) ? Response.ok(heroUpdated).build() : Response.status(Response.Status.BAD_REQUEST).build())
             .invoke(response -> LOGGER.debug("Hero updated {} {}", response.getStatus(), response.getEntity()));
     }

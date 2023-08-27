@@ -1,0 +1,103 @@
+{
+  "consumer": {
+    "name": "rest-fights"
+  },
+  "interactions": [
+    {
+      "description": "A request for a random hero",
+      "key": "df5e15cd",
+      "pending": false,
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/json"
+          ]
+        },
+        "method": "GET",
+        "path": "/api/heroes/random"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "level": 44,
+            "name": "Super Baguette Pact",
+            "picture": "super_baguette_pact.png"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.level": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.picture": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "transport": "https",
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "A request for a random hero",
+      "key": "ad777651",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "No random hero found"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/json"
+          ]
+        },
+        "method": "GET",
+        "path": "/api/heroes/random"
+      },
+      "response": {
+        "status": 404
+      },
+      "transport": "https",
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.5.6"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "rest-heroes"
+  }
+}
