@@ -15,7 +15,6 @@ import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +35,7 @@ class HeroContractVerificationTest {
 
         // We have to do this here because the CDI context isn't available
         // in the @State method below
+        // See https://github.com/quarkusio/quarkus/issues/22611
         var noHeroState = Optional.ofNullable(context.getInteraction().getProviderStates())
             .orElseGet(List::of)
             .stream().anyMatch(state -> NO_HERO_FOUND_STATE.equals(state.getName()));
@@ -43,7 +43,6 @@ class HeroContractVerificationTest {
         if (noHeroState) {
             PanacheMock.mock(Hero.class);
             Mockito.when(Hero.findRandom()).thenReturn(Uni.createFrom().nullItem());
-
         }
     }
 
@@ -54,9 +53,6 @@ class HeroContractVerificationTest {
     }
 
     @State(NO_HERO_FOUND_STATE)
-    public void clearData() throws NoSuchMethodException, InvocationTargetException,
-        IllegalAccessException {
-        // Already handled in beforeEach
-        // See https://github.com/quarkusio/quarkus/issues/22611
+    public void noHeroFoundState() {
     }
 }

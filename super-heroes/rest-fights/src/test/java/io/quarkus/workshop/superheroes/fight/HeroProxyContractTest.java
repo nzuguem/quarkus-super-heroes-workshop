@@ -27,7 +27,7 @@ import static io.restassured.RestAssured.given;
     //!!! You'll need to update the provider port (for the TEST profile) in application.properties!!!!
     port = "8096"
 )
-class FightsResourceContractTest {
+class HeroProxyContractTest {
 
     @Pact(consumer = "rest-fights")
     public V4Pact randomHeroFoundPact(PactDslWithProvider builder) {
