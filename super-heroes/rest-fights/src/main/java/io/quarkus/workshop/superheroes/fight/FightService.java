@@ -7,6 +7,8 @@ import io.quarkus.workshop.superheroes.fight.client.VillainProxy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,10 @@ public class FightService {
 
     @RestClient
     private VillainProxy villainProxy;
+
+    @Channel("fights")
+    private Emitter<Fight> emitter;
+
 
     private static final Random RANDOM = new Random();
 
@@ -62,6 +68,8 @@ public class FightService {
         fight.fightDate = Instant.now(Clock.systemDefaultZone());
         fight.persist();
 
+        this.emitter.send(fight).toCompletableFuture().join();
+        
         return fight;
     }
 
