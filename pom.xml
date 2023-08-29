@@ -18,6 +18,7 @@
         <module>super-heroes/rest-heroes</module>
         <module>super-heroes/rest-fights</module>
         <module>super-heroes/event-statistics</module>
+        <module>super-heroes/extension-version</module>
     </modules>
     <build>
         <plugins>

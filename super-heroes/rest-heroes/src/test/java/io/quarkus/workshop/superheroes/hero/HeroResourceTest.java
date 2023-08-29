@@ -68,7 +68,7 @@ class HeroResourceTest {
                 "otherName": "Super Baguette Tradition",
                 "picture": "super_baguette.png",
                 "powers": "eats baguette really quickly",
-                "maturity": 0
+                "level": 0
             }
             """;
 
@@ -111,7 +111,7 @@ class HeroResourceTest {
                 "otherName": "Super Baguette Tradition",
                 "picture": "super_baguette.png",
                 "powers": "eats baguette really quickly",
-                "maturity": 42
+                "level": 42
             }
             """;
 
@@ -145,7 +145,7 @@ class HeroResourceTest {
                 "otherName": "Super Baguette Tradition (updated)",
                 "picture": "super_baguette_updated.png",
                 "powers": "eats baguette really quickly (updated)",
-                "maturity": 43
+                "level": 43
             }
             """, Long.valueOf(heroId));
 
